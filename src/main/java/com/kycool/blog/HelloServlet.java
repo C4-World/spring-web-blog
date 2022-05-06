@@ -1,4 +1,4 @@
-package com.kycool.springwebblog;
+package com.kycool.blog;
 
 import java.io.*;
 import javax.servlet.http.*;

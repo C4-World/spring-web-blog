@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop.xsd
+            http://www.springframework.org/schema/mvc
+            http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- 扫描 controller 包，并将其生命周期纳入 Spring 管理-->
+    <context:component-scan base-package="com.kycool.blog.controller">
+        <!--只扫描 Controller 和 RestController 注解的类-->
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>
+    </context:component-scan>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+    <!-- 注解驱动，以使得访问路径与方法的匹配可以通过注解配置 -->
+    <!--mvc:annotation-driven 默认加载很多的参数绑定方法，比如 json 转换解析器就默认加载了-->
+    <mvc:annotation-driven />
+
+    <!-- 配置拦截器 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.kycool.blog.response.ResponseResultInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!--静态页面，使用默认的 Servlet 来响应静态文件， 如 html,css,js,images可以访问-->
+    <mvc:default-servlet-handler />
+
+</beans>
